@@ -1,16 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
+'import React from 'react';
+'import logo from './logo.svg';
 import './App.css';
 import ABSChat from "abs-chat-sdk";
 
-const chat = new ABSChat('my-other-api-key');
+const sticky_session_id = '79j2x-12s21-a98n-12ed';
+var chat = new ABSChat('my-other-api-key', sticky_session_id);
 
-function login () {
-  chat.credentialsToToken('myUserName','MyPassWord')
+chat.onmessage = function (event) {
+    document.getElementById('chat_messages').innerHTML = document.getElementById('chat_messages').innerHTML + '<br>' + event.data;
+};
+
+function adminAuth () {
+  chat.adminAuth('SomeAdminUserName','SomePassword')
 }
-
 function sendMessage(e) {
-  chat.sendMessage('MyName', 'SomeoneSessionId', 'Hello There!', null)
+  //sendMessage(from_name, to_session_id, body, base64_encoded_image)
+  chat.sendMessage('MyUserName', null, 'Hello World!', null)
 }
 
 function connect(e) {
@@ -32,7 +37,7 @@ function App() {
     <div className="App">
       <header className="App-header">
 
-      <button onClick={login}>login</button>
+      <button onClick={adminAuth}>adminAuth</button>
 
       <button onClick={connect}>connect</button>
 
@@ -41,6 +46,8 @@ function App() {
       <button onClick={startMonitor}>startMonitor</button>
 
       <button onClick={stopMonitor}>stopMonitor</button>
+
+<div id="chat_messages"></div>
 
       <img src={logo} className="App-logo" alt="logo"/>
 
